@@ -1,6 +1,6 @@
 {
   "name": "cyberhi-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/index.js",
   "module": "esm/index.js",
   "homepage": "https://developers.revolt.chat",

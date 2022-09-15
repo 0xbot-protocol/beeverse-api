@@ -34,7 +34,7 @@ export function getPathName(anyPath: string) {
     for (const entry of list) {
         let i = 1;
         let copy = [...segments];
-        for (i;i<segments.length;i++) {
+        for (i; i < segments.length; i++) {
             if (Array.isArray(entry[i - 1])) {
                 copy[i] = entry[i - 1];
                 continue;
@@ -49,7 +49,7 @@ export function getPathName(anyPath: string) {
 /**
  * Client configuration options
  */
- export interface Options {
+export interface Options {
     /**
      * Base URL of the Revolt node
      */
@@ -61,6 +61,8 @@ export function getPathName(anyPath: string) {
         rauth?: string | undefined;
         revolt?: { token: string } | string | undefined;
     };
+
+    headers: any
 }
 
 /**
@@ -69,44 +71,83 @@ export function getPathName(anyPath: string) {
 export class API {
     private baseURL: Options['baseURL'];
     private authentication: Options['authentication'];
+    private headers: Options['headers'];
 
-    constructor({ baseURL, authentication }: Partial<Options> = { }) {
+    constructor({ baseURL, authentication, headers }: Partial<Options> = {}) {
         this.baseURL = baseURL || defaultBaseURL;
-        this.authentication = authentication || { };
+        this.authentication = authentication || {};
     }
 
     /**
      * Generate authentication options.
      */
     get auth(): AxiosRequestConfig {
+
+        let headersConfig = {
+
+        }
+
         if (this.authentication.rauth) {
             if (typeof this.authentication.rauth === 'string') {
-                return {
-                    headers: {
-                        'X-Session-Token': this.authentication.rauth
-                    }
+
+
+                // return {
+                //     headers: {
+                //         'X-Session-Token': this.authentication.rauth
+                //     }
+                // }
+
+                headersConfig = {
+                    'X-Session-Token': this.authentication.rauth
                 }
+
             }
         } else if (this.authentication.revolt) {
             switch (typeof this.authentication.revolt) {
                 case 'string': {
-                    return {
-                        headers: {
-                            'X-Bot-Token': this.authentication.revolt
-                        }
+                    // return {
+                    //     headers: {
+                    //         'X-Bot-Token': this.authentication.revolt
+                    //     }
+                    // }
+
+                    headersConfig = {
+                        'X-Bot-Token': this.authentication.revolt
                     }
+
+                    break;
                 }
                 case 'object': {
-                    return {
-                        headers: {
-                            'X-Session-Token': this.authentication.revolt.token
-                        }
+                    // return {
+                    //     headers: {
+                    //         'X-Session-Token': this.authentication.revolt.token
+                    //     }
+                    // }
+
+                    headersConfig = {
+                        'X-Session-Token': this.authentication.revolt.token
                     }
+
+                    break;
+                }
+
+            }
+        }
+
+        if (this.headers) {
+            return {
+                headers: {
+                    ...headersConfig,
+                    ...this.headers
                 }
             }
         }
 
-        return { };
+        return {
+            headers: {
+                ...headersConfig
+            }
+        };
     }
 
     /**
@@ -160,7 +201,7 @@ export class API {
             config,
             this.config
         )))
-        .then(res => res.data);
+            .then(res => res.data);
     }
 
     /**
@@ -213,7 +254,7 @@ export class API {
      * @returns Typed Response Data
      */
     put<Path extends PutRoutes['path'], Route extends PutRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
-    
+
     /**
      * Send HTTP PUT request.
      * @param path Path
@@ -234,7 +275,7 @@ export class API {
      * @returns Typed Response Data
      */
     delete<Path extends DeleteRoutes['path'], Route extends DeleteRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params?: any, config?: AxiosRequestConfig): Promise<Route['response']>;
-    
+
     /**
      * Send HTTP DELETE request.
      * @param path Path
@@ -256,7 +297,7 @@ export class API {
      * @returns Typed Response Data
      */
     post<Path extends PostRoutes['path'], Route extends PostRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
-    
+
     /**
      * Send HTTP POST request.
      * @param path Path
