@@ -1,14 +1,14 @@
 {
-  "name": "cyberhi--api",
-  "version": "1.0.1",
-  "description": "",
+  "name": "cyberhi-api",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "module": "esm/index.js",
-  "repository": "git@github.com:cyberhilab/cyberhi-api.git",
+  "homepage": "https://developers.revolt.chat",
+  "repository": "https://github.com/cyberhilab/cyberhi-api.git",
   "author": "cyberhilab",
   "license": "MIT",
   "scripts": {
-    "build": "REWRITE_ANYOF=1 oapilib && tsc && tsc -p tsconfig.esm.json",
+    "build": "tsc && tsc -p tsconfig.esm.json",
     "prepublish": "in-publish && yarn build || echo Skipping build."
   },
   "devDependencies": {
