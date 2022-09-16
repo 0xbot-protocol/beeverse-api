@@ -76,6 +76,7 @@ export class API {
     constructor({ baseURL, authentication, headers }: Partial<Options> = {}) {
         this.baseURL = baseURL || defaultBaseURL;
         this.authentication = authentication || {};
+        this.headers = headers
     }
 
     /**
@@ -141,13 +142,13 @@ export class API {
                     ...this.headers
                 }
             }
+        } else {
+            return {
+                headers: {
+                    ...headersConfig
+                }
+            };
         }
-
-        return {
-            headers: {
-                ...headersConfig
-            }
-        };
     }
 
     /**
